@@ -5,10 +5,15 @@ import Display from './Display';
 class Pomodoro extends React.Component {
   constructor() {
     super();
-    this.state = {};
+    this.state = {
+      breakLength: 5,
+      sessionLength: 25,
+      sessionTime: 1500000,
+    };
   }
 
   render() {
+    const { breakLength, sessionTime, sessionLength } = this.state;
     return (
       <div className="pomodoro">
         <h1>Pomodoro Clock</h1>
@@ -18,7 +23,7 @@ class Pomodoro extends React.Component {
           incrementID="break-increment"
           decrementID="break-decrement"
           lengthID="break-length"
-          length="5"
+          length={breakLength}
         />
         <LengthBox
           boxID="session-label"
@@ -26,9 +31,9 @@ class Pomodoro extends React.Component {
           incrementID="session-increment"
           decrementID="session-decrement"
           lengthID="session-length"
-          length="25"
+          length={sessionLength}
         />
-        <Display title="Session" timeLeft="25:00" />
+        <Display title="Session" timeLeft={sessionTime} />
       </div>
     );
   }
