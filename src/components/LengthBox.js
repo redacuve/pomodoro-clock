@@ -5,17 +5,17 @@ import { faAngleUp, faAngleDown } from '@fortawesome/free-solid-svg-icons';
 
 function LengthBox(props) {
   const {
-    boxID, title, incrementID, decrementID, lengthID, length,
+    boxID, title, incrementID, decrementID, lengthID, length, clickHandler,
   } = props;
 
   return (
     <div id={boxID}>
       <h3>{title}</h3>
-      <button id={incrementID} type="button">
+      <button id={incrementID} type="button" onClick={() => clickHandler('UP')}>
         <FontAwesomeIcon icon={faAngleUp} />
       </button>
       <div id={lengthID}>{length}</div>
-      <button id={decrementID} type="button">
+      <button id={decrementID} type="button" onClick={() => clickHandler('DOWN')}>
         <FontAwesomeIcon icon={faAngleDown} />
       </button>
     </div>
@@ -29,6 +29,7 @@ LengthBox.propTypes = {
   decrementID: PropTypes.string.isRequired,
   lengthID: PropTypes.string.isRequired,
   length: PropTypes.number.isRequired,
+  clickHandler: PropTypes.number.isRequired,
 };
 
 export default LengthBox;

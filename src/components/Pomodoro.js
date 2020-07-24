@@ -10,6 +10,36 @@ class Pomodoro extends React.Component {
       sessionLength: 25,
       sessionTime: 1500000,
     };
+    this.handleSessionLength = this.handleSessionLength.bind(this);
+    this.handleBreakLength = this.handleBreakLength.bind(this);
+  }
+
+  handleSessionLength(command) {
+    const { sessionLength } = this.state;
+    if (command === 'UP') {
+      if (sessionLength < 60) {
+        this.setState(state => ({ sessionLength: state.sessionLength + 1 }));
+      }
+    }
+    if (command === 'DOWN') {
+      if (sessionLength > 1) {
+        this.setState(state => ({ sessionLength: state.sessionLength - 1 }));
+      }
+    }
+  }
+
+  handleBreakLength(command) {
+    const { breakLength } = this.state;
+    if (command === 'UP') {
+      if (breakLength < 60) {
+        this.setState(state => ({ breakLength: state.breakLength + 1 }));
+      }
+    }
+    if (command === 'DOWN') {
+      if (breakLength > 1) {
+        this.setState(state => ({ breakLength: state.breakLength - 1 }));
+      }
+    }
   }
 
   render() {
@@ -24,6 +54,7 @@ class Pomodoro extends React.Component {
           decrementID="break-decrement"
           lengthID="break-length"
           length={breakLength}
+          clickHandler={this.handleBreakLength}
         />
         <LengthBox
           boxID="session-label"
@@ -32,6 +63,7 @@ class Pomodoro extends React.Component {
           decrementID="session-decrement"
           lengthID="session-length"
           length={sessionLength}
+          clickHandler={this.handleSessionLength}
         />
         <Display title="Session" timeLeft={sessionTime} />
       </div>
