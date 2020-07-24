@@ -29,7 +29,7 @@ LengthBox.propTypes = {
   decrementID: PropTypes.string.isRequired,
   lengthID: PropTypes.string.isRequired,
   length: PropTypes.number.isRequired,
-  clickHandler: PropTypes.number.isRequired,
+  clickHandler: PropTypes.func.isRequired,
 };
 
 export default LengthBox;
