@@ -1,29 +1,37 @@
 import React from 'react';
+import LengthBox from './LengthBox';
+import Display from './Display';
 
-function Pomodoro() {
-  return (
-    <div className="pomodoro">
-      Pomodoro Clock
-      <div id="break-label">
-        Break Label
-        <button id="break-increment" type="button"></button>
-        <div id="break-length">5</div>
-        <button id="break-decrement" type="button"></button>
+class Pomodoro extends React.Component {
+  constructor() {
+    super();
+    this.state = {};
+  }
+
+  render() {
+    return (
+      <div className="pomodoro">
+        <h1>Pomodoro Clock</h1>
+        <LengthBox
+          boxID="break-label"
+          title="Break Length"
+          incrementID="break-increment"
+          decrementID="break-decrement"
+          lengthID="break-length"
+          length="5"
+        />
+        <LengthBox
+          boxID="session-label"
+          title="Session Length"
+          incrementID="session-increment"
+          decrementID="session-decrement"
+          lengthID="session-length"
+          length="25"
+        />
+        <Display title="Session" timeLeft="25:00" />
       </div>
-      <div id="session-label">
-        Session Length
-        <button id="session-increment" type="button"></button>
-        <div id="session-length">25</div>
-        <button id="session-decrement" type="button"></button>
-      </div>
-      <div id="timer-label">
-        Session
-      </div>
-      <div id="time-left">25:00</div>
-      <button type="button" id="start_stop"></button>
-      <button type="button" id="reset"></button>
-    </div>
-  );
+    );
+  }
 }
 
 export default Pomodoro;
