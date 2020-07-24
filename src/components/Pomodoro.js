@@ -8,21 +8,34 @@ class Pomodoro extends React.Component {
     this.state = {
       breakLength: 5,
       sessionLength: 25,
-      sessionTime: 1500000,
+      sessionTime: 1500,
+      timer: 'stop',
     };
     this.handleSessionLength = this.handleSessionLength.bind(this);
     this.handleBreakLength = this.handleBreakLength.bind(this);
+    this.playPauseHandler = this.playPauseHandler.bind(this);
+    this.resetHandler = this.resetHandler.bind(this);
   }
 
   handleSessionLength(command) {
-    const { sessionLength } = this.state;
+    const { sessionLength, timer } = this.state;
     if (command === 'UP') {
-      if (sessionLength < 60) {
+      if (sessionLength < 60 && timer !== 'running') {
+        this.setState(state => ({
+          sessionLength: state.sessionLength + 1,
+          sessionTime: state.sessionLength * 60 + 60,
+        }));
+      } else if (sessionLength < 60) {
         this.setState(state => ({ sessionLength: state.sessionLength + 1 }));
       }
     }
     if (command === 'DOWN') {
-      if (sessionLength > 1) {
+      if (sessionLength > 1 && timer !== 'running') {
+        this.setState(state => ({
+          sessionLength: state.sessionLength - 1,
+          sessionTime: state.sessionLength * 60 - 60,
+        }));
+      } else if (sessionLength > 1) {
         this.setState(state => ({ sessionLength: state.sessionLength - 1 }));
       }
     }
@@ -40,6 +53,22 @@ class Pomodoro extends React.Component {
         this.setState(state => ({ breakLength: state.breakLength - 1 }));
       }
     }
+  }
+
+  playPauseHandler() {
+    const { timer } = this.state;
+    if (timer === 'running') {
+      this.setState({ timer: 'pause' });
+    } else if (timer === 'pause' || timer === 'stop') {
+      this.setState({ timer: 'running' });
+    }
+  }
+
+  resetHandler() {
+    this.setState(state => ({
+      sessionTime: state.sessionLength * 60,
+      timer: 'stop',
+    }));
   }
 
   render() {
@@ -65,7 +94,12 @@ class Pomodoro extends React.Component {
           length={sessionLength}
           clickHandler={this.handleSessionLength}
         />
-        <Display title="Session" timeLeft={sessionTime} />
+        <Display
+          title="Session"
+          timeLeft={sessionTime}
+          resetHandler={this.resetHandler}
+          playPauseHandler={this.playPauseHandler}
+        />
       </div>
     );
   }
