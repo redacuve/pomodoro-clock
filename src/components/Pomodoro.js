@@ -9,7 +9,9 @@ class Pomodoro extends React.Component {
       breakLength: 5,
       sessionLength: 25,
       sessionTime: 1500,
+      timerLabel: 'Session',
       timer: 'stop',
+      timeoutFunc: '',
     };
     this.handleSessionLength = this.handleSessionLength.bind(this);
     this.handleBreakLength = this.handleBreakLength.bind(this);
@@ -55,24 +57,65 @@ class Pomodoro extends React.Component {
     }
   }
 
+  decrementTimer() {
+    const { sessionTime, timeoutFunc, timerLabel } = this.state
+    if (sessionTime > 0){
+      this.setState(state => ({ sessionTime: state.sessionTime - 1 }));
+    } else {
+      clearTimeout(timeoutFunc);
+      if (timerLabel === 'Session'){
+        this.setState({timerLabel: 'Break'});
+      } else {
+        this.setState({timerLabel: 'Session'});
+      }
+    }
+  }
+
+  startTimer() {
+    this.setState({
+      timeoutFunc: setInterval(() => {
+        this.decrementTimer();
+      }, 1000),
+    });
+  }
+
   playPauseHandler() {
-    const { timer } = this.state;
-    if (timer === 'running') {
-      this.setState({ timer: 'pause' });
-    } else if (timer === 'pause' || timer === 'stop') {
-      this.setState({ timer: 'running' });
+    const { timer, timeoutFunc } = this.state;
+    switch (timer) {
+      case 'running':
+        this.setState({ timer: 'pause' });
+        clearTimeout(timeoutFunc);
+        break;
+      case 'pause':
+        clearTimeout(timeoutFunc);
+        this.setState({ timer: 'running' });
+        this.startTimer();
+        break;
+      case 'stop':
+        clearTimeout(timeoutFunc);
+        this.setState({ timer: 'running' });
+        this.startTimer();
+        break;
+      default:
+        break;
     }
   }
 
   resetHandler() {
+    const { timeoutFunc } = this.state;
+    clearTimeout(timeoutFunc);
     this.setState(state => ({
-      sessionTime: state.sessionLength * 60,
+      breakLength: 5,
+      sessionLength: 25,
+      sessionTime: 1500,
       timer: 'stop',
+      timeoutFunc: '',
+      timerLabel: 'Session',
     }));
   }
 
   render() {
-    const { breakLength, sessionTime, sessionLength } = this.state;
+    const { breakLength, sessionTime, sessionLength, timerLabel } = this.state;
     return (
       <div className="pomodoro">
         <h1>Pomodoro Clock</h1>
@@ -95,7 +138,7 @@ class Pomodoro extends React.Component {
           clickHandler={this.handleSessionLength}
         />
         <Display
-          title="Session"
+          title={timerLabel}
           timeLeft={sessionTime}
           resetHandler={this.resetHandler}
           playPauseHandler={this.playPauseHandler}
