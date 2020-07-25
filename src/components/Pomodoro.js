@@ -1,6 +1,7 @@
 import React from 'react';
 import LengthBox from './LengthBox';
 import Display from './Display';
+import beep from '../assets/beep.mp3';
 
 class Pomodoro extends React.Component {
   constructor() {
@@ -112,6 +113,9 @@ class Pomodoro extends React.Component {
       timeoutFunc: '',
       timerLabel: 'Session',
     }));
+    const sound = document.querySelector('#beep');
+    sound.pause();
+    sound.currentTime = 0;
   }
 
   render() {
@@ -143,6 +147,7 @@ class Pomodoro extends React.Component {
           resetHandler={this.resetHandler}
           playPauseHandler={this.playPauseHandler}
         />
+        <audio id="beep" src={beep}></audio>
       </div>
     );
   }
