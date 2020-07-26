@@ -15,82 +15,47 @@ class Pomodoro extends React.Component {
       timer: 'stop',
       timeoutFunc: '',
     };
-    this.handleSessionLength = this.handleSessionLength.bind(this);
-    this.handleBreakLength = this.handleBreakLength.bind(this);
+    this.handleLength = this.handleLength.bind(this);
     this.playPauseHandler = this.playPauseHandler.bind(this);
     this.resetHandler = this.resetHandler.bind(this);
   }
 
-  handleSessionLength(command) {
-    const { sessionLength, timer } = this.state;
-    if (command === 'UP') {
-      if (sessionLength < 60 && timer !== 'running') {
-        this.setState(state => ({
-          sessionLength: state.sessionLength + 1,
-          sessionTime: state.sessionLength * 60 + 60,
-        }));
-      } else if (sessionLength < 60) {
-        this.setState(state => ({ sessionLength: state.sessionLength + 1 }));
-      }
-    }
-    if (command === 'DOWN') {
-      if (sessionLength > 1 && timer !== 'running') {
-        this.setState(state => ({
-          sessionLength: state.sessionLength - 1,
-          sessionTime: state.sessionLength * 60 - 60,
-        }));
-      } else if (sessionLength > 1) {
-        this.setState(state => ({ sessionLength: state.sessionLength - 1 }));
-      }
-    }
-  }
-
-  handleBreakLength(command) {
-    const { breakLength, timer } = this.state;
-    if (command === 'UP') {
-      if (breakLength < 60 && timer !== 'running') {
-        this.setState(state => ({
-          breakLength: state.breakLength + 1,
-          breakTime: state.breakTime * 60 + 60,
-        }));
-      } else if (breakLength < 60) {
-        this.setState(state => ({ breakLength: state.breakLength + 1 }));
-      }
-    }
-    if (command === 'DOWN') {
-      if (breakLength > 1 && timer !== 'running') {
-        this.setState(state => ({
-          breakLength: state.breakLength - 1,
-          breakTime: state.breakTime * 60 - 60,
-        }));
-      } else if (breakLength > 1) {
-        this.setState(state => ({ breakLength: state.breakLength - 1 }));
-      }
-    }
-  }
-
-  decrementSessionTimer() {
-    const { sessionTime, timeoutFunc, timerLabel } = this.state;
-    if (sessionTime > 0) {
-      this.setState(state => ({ sessionTime: state.sessionTime - 1 }));
+  handleLength(lengthID, command) {
+    let stateL = '';
+    if (lengthID === 'session-length') {
+      stateL = 'sessionLength';
     } else {
-      clearTimeout(timeoutFunc);
-      document.querySelector('#beep').play();
-      this.setState(state => ({ timeoutFunc: '', sessionTime: state.sessionLength * 60, breakTime: state.breakLength * 60 }));
-      if (timerLabel === 'Session') {
-        this.setState({ timerLabel: 'Break' });
-        this.startTimer('Break');
-      } else {
-        this.setState({ timerLabel: 'Session' });
-        this.startTimer('Session');
+      stateL = 'breakLength';
+    }
+    const { [stateL]: stateLen, timer } = this.state;
+    const stateTime = lengthID === 'session-length' ? 'sessionTime' : 'breakTime';
+    if (command === 'UP') {
+      if (stateLen < 60 && timer !== 'running') {
+        this.setState(state => ({
+          [stateL]: state[stateL] + 1,
+          [stateTime]: state[stateL] * 60 + 60,
+        }));
+      } else if (stateLen < 60) {
+        this.setState(state => ({ [stateL]: state[stateL] + 1 }));
+      }
+    }
+    if (command === 'DOWN') {
+      if (stateLen > 1 && timer !== 'running') {
+        this.setState(state => ({
+          [stateL]: state[stateL] - 1,
+          [stateTime]: state[stateL] * 60 - 60,
+        }));
+      } else if (stateLen > 1) {
+        this.setState(state => ({ [stateL]: state[stateL] - 1 }));
       }
     }
   }
 
-  decrementBreakTimer() {
-    const { breakTime, timeoutFunc, timerLabel } = this.state;
-    if (breakTime > 0) {
-      this.setState(state => ({ breakTime: state.breakTime - 1 }));
+  decrementTimer(timerName) {
+    const SBTime = timerName === 'session' ? 'sessionTime' : 'breakTime';
+    const { [SBTime]: timeSB, timeoutFunc, timerLabel } = this.state;
+    if (timeSB > 0) {
+      this.setState(state => ({ [SBTime]: state[SBTime] - 1 }));
     } else {
       clearTimeout(timeoutFunc);
       document.querySelector('#beep').play();
@@ -106,40 +71,26 @@ class Pomodoro extends React.Component {
   }
 
   startTimer(tLabel) {
-    if (tLabel === 'Session') {
-      this.setState({
-        timeoutFunc: setInterval(() => {
-          this.decrementSessionTimer();
-        }, 1000),
-      });
-    } else {
-      this.setState({
-        timeoutFunc: setInterval(() => {
-          this.decrementBreakTimer();
-        }, 1000),
-      });
-    }
+    this.setState({
+      timeoutFunc: setInterval(() => {
+        if (tLabel === 'Session') {
+          this.decrementTimer('session');
+        } else {
+          this.decrementTimer('break');
+        }
+      }, 1000),
+    });
   }
 
   playPauseHandler() {
     const { timer, timeoutFunc, timerLabel } = this.state;
-    switch (timer) {
-      case 'running':
-        this.setState({ timer: 'pause' });
-        clearTimeout(timeoutFunc);
-        break;
-      case 'pause':
-        clearTimeout(timeoutFunc);
-        this.setState({ timer: 'running' });
-        this.startTimer(timerLabel);
-        break;
-      case 'stop':
-        clearTimeout(timeoutFunc);
-        this.setState({ timer: 'running' });
-        this.startTimer(timerLabel);
-        break;
-      default:
-        break;
+    if (timer === 'running') {
+      this.setState({ timer: 'stop' });
+      clearTimeout(timeoutFunc);
+    } else {
+      clearTimeout(timeoutFunc);
+      this.setState({ timer: 'running' });
+      this.startTimer(timerLabel);
     }
   }
 
@@ -174,7 +125,7 @@ class Pomodoro extends React.Component {
           decrementID="break-decrement"
           lengthID="break-length"
           length={breakLength}
-          clickHandler={this.handleBreakLength}
+          clickHandler={this.handleLength}
         />
         <LengthBox
           boxID="session-label"
@@ -183,7 +134,7 @@ class Pomodoro extends React.Component {
           decrementID="session-decrement"
           lengthID="session-length"
           length={sessionLength}
-          clickHandler={this.handleSessionLength}
+          clickHandler={this.handleLength}
         />
         <Display
           title={timerLabel}

@@ -11,11 +11,11 @@ function LengthBox(props) {
   return (
     <div id={boxID}>
       <h3>{title}</h3>
-      <button id={incrementID} type="button" onClick={() => clickHandler('UP')}>
+      <button id={incrementID} type="button" onClick={() => clickHandler(lengthID, 'UP')}>
         <FontAwesomeIcon icon={faAngleUp} />
       </button>
       <div id={lengthID}>{length}</div>
-      <button id={decrementID} type="button" onClick={() => clickHandler('DOWN')}>
+      <button id={decrementID} type="button" onClick={() => clickHandler(lengthID, 'DOWN')}>
         <FontAwesomeIcon icon={faAngleDown} />
       </button>
     </div>
