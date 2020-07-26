@@ -10,6 +10,7 @@ class Pomodoro extends React.Component {
       breakLength: 5,
       sessionLength: 25,
       sessionTime: 1500,
+      breakTime: 300,
       timerLabel: 'Session',
       timer: 'stop',
       timeoutFunc: '',
@@ -45,43 +46,83 @@ class Pomodoro extends React.Component {
   }
 
   handleBreakLength(command) {
-    const { breakLength } = this.state;
+    const { breakLength, timer } = this.state;
     if (command === 'UP') {
-      if (breakLength < 60) {
+      if (breakLength < 60 && timer !== 'running') {
+        this.setState(state => ({
+          breakLength: state.breakLength + 1,
+          breakTime: state.breakTime * 60 + 60,
+        }));
+      } else if (breakLength < 60) {
         this.setState(state => ({ breakLength: state.breakLength + 1 }));
       }
     }
     if (command === 'DOWN') {
-      if (breakLength > 1) {
+      if (breakLength > 1 && timer !== 'running') {
+        this.setState(state => ({
+          breakLength: state.breakLength - 1,
+          breakTime: state.breakTime * 60 - 60,
+        }));
+      } else if (breakLength > 1) {
         this.setState(state => ({ breakLength: state.breakLength - 1 }));
       }
     }
   }
 
-  decrementTimer() {
-    const { sessionTime, timeoutFunc, timerLabel } = this.state
-    if (sessionTime > 0){
+  decrementSessionTimer() {
+    const { sessionTime, timeoutFunc, timerLabel } = this.state;
+    if (sessionTime > 0) {
       this.setState(state => ({ sessionTime: state.sessionTime - 1 }));
     } else {
       clearTimeout(timeoutFunc);
-      if (timerLabel === 'Session'){
-        this.setState({timerLabel: 'Break'});
+      document.querySelector('#beep').play();
+      this.setState(state => ({ timeoutFunc: '', sessionTime: state.sessionLength * 60, breakTime: state.breakLength * 60 }));
+      if (timerLabel === 'Session') {
+        this.setState({ timerLabel: 'Break' });
+        this.startTimer('Break');
       } else {
-        this.setState({timerLabel: 'Session'});
+        this.setState({ timerLabel: 'Session' });
+        this.startTimer('Session');
       }
     }
   }
 
-  startTimer() {
-    this.setState({
-      timeoutFunc: setInterval(() => {
-        this.decrementTimer();
-      }, 1000),
-    });
+  decrementBreakTimer() {
+    const { breakTime, timeoutFunc, timerLabel } = this.state;
+    if (breakTime > 0) {
+      this.setState(state => ({ breakTime: state.breakTime - 1 }));
+    } else {
+      clearTimeout(timeoutFunc);
+      document.querySelector('#beep').play();
+      this.setState(state => ({ timeoutFunc: '', sessionTime: state.sessionLength * 60, breakTime: state.breakLength * 60 }));
+      if (timerLabel === 'Session') {
+        this.setState({ timerLabel: 'Break' });
+        this.startTimer('Break');
+      } else {
+        this.setState({ timerLabel: 'Session' });
+        this.startTimer('Session');
+      }
+    }
+  }
+
+  startTimer(tLabel) {
+    if (tLabel === 'Session') {
+      this.setState({
+        timeoutFunc: setInterval(() => {
+          this.decrementSessionTimer();
+        }, 1000),
+      });
+    } else {
+      this.setState({
+        timeoutFunc: setInterval(() => {
+          this.decrementBreakTimer();
+        }, 1000),
+      });
+    }
   }
 
   playPauseHandler() {
-    const { timer, timeoutFunc } = this.state;
+    const { timer, timeoutFunc, timerLabel } = this.state;
     switch (timer) {
       case 'running':
         this.setState({ timer: 'pause' });
@@ -90,12 +131,12 @@ class Pomodoro extends React.Component {
       case 'pause':
         clearTimeout(timeoutFunc);
         this.setState({ timer: 'running' });
-        this.startTimer();
+        this.startTimer(timerLabel);
         break;
       case 'stop':
         clearTimeout(timeoutFunc);
         this.setState({ timer: 'running' });
-        this.startTimer();
+        this.startTimer(timerLabel);
         break;
       default:
         break;
@@ -105,21 +146,24 @@ class Pomodoro extends React.Component {
   resetHandler() {
     const { timeoutFunc } = this.state;
     clearTimeout(timeoutFunc);
-    this.setState(state => ({
+    this.setState({
       breakLength: 5,
       sessionLength: 25,
       sessionTime: 1500,
+      breakTime: 300,
       timer: 'stop',
       timeoutFunc: '',
       timerLabel: 'Session',
-    }));
+    });
     const sound = document.querySelector('#beep');
     sound.pause();
     sound.currentTime = 0;
   }
 
   render() {
-    const { breakLength, sessionTime, sessionLength, timerLabel } = this.state;
+    const {
+      breakLength, sessionTime, sessionLength, timerLabel, breakTime,
+    } = this.state;
     return (
       <div className="pomodoro">
         <h1>Pomodoro Clock</h1>
@@ -143,11 +187,12 @@ class Pomodoro extends React.Component {
         />
         <Display
           title={timerLabel}
-          timeLeft={sessionTime}
+          timeLeft={timerLabel === 'Session' ? sessionTime : breakTime}
           resetHandler={this.resetHandler}
           playPauseHandler={this.playPauseHandler}
         />
-        <audio id="beep" src={beep}></audio>
+        { /* eslint-disable-next-line jsx-a11y/media-has-caption */ }
+        <audio id="beep" src={beep} />
       </div>
     );
   }
