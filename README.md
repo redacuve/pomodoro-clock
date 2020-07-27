@@ -11,6 +11,9 @@
 
 
 <!-- Project Header -->
+  <p align="center">
+    <img src="pomodoro.png" width="250">
+  <br>
   <h1 align="center">Project Pomodoro Clock</h1>
   <p align="center">
   <br>
@@ -47,6 +50,9 @@ It's a basic Pomodoro app, you can change the time for every session and break t
 Also, it notifies you when your time ended with a beep sound.
 Keep control of time spent on specific activities with the Pomodoro technique.
 
+  <p align="center">
+    <img src="pomodoro.gif" width="450">
+  <br>
 
 ### Built With
 
