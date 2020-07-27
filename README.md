@@ -1,68 +1,130 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<!-- Badges -->
+<p>
+  <img alt="Version" src="https://img.shields.io/badge/version-0.1-blue.svg?cacheSeconds=2592000" />
+  <a href="#" target="_blank">
+    <img alt="License: GPLv3 " src="https://img.shields.io/badge/License-GPL-yellow.svg" />
+  </a>
+  <a href="https://twitter.com/redacuve" target="_blank">
+    <img alt="Twitter: redacuve " src="https://img.shields.io/twitter/follow/redacuve.svg?style=social" />
+  </a>
+</p>
 
-## Available Scripts
 
-In the project directory, you can run:
+<!-- Project Header -->
+  <p align="center">
+    <img src="pomodoro.png" width="250">
+  <br>
+  <h1 align="center">Project Pomodoro Clock</h1>
+  <p align="center">
+  <br>
+   <a href="https://github.com/redacuve/pomodoro-clock"><strong>Explore the repo »</strong></a>
+  <br>
+    <a href="https://github.com/redacuve/pomodoro-clock/issues">Request Feature</a>
+  </p>
+  <h2 align="center"><a href="https://mypomodoro-clock.netlify.app/"><strong>Live Link!</strong></a></h2>
 
-### `yarn start`
+<!-- TABLE OF CONTENTS -->
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Table of Contents
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+* [About the Project](#about-the-project)
 
-### `yarn test`
+* [Built With](#built-with)
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+* [Getting Started](#getting-started)
 
-### `yarn build`
+* [How it Works](#how-it-works)
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+* [Contributing](#contributing)
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+* [License](#license)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+* [Contact](#contact)
 
-### `yarn eject`
+<!-- ABOUT THE PROJECT -->
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## About The Project
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+This is a simple project build with React.
+It's a basic Pomodoro app, you can change the time for every session and break time, by default they are set to 25 minutes per session and 5 per break, you can change maximum to 60 minutes each.
+Also, it notifies you when your time ended with a beep sound.
+Keep control of time spent on specific activities with the Pomodoro technique.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+  <p align="center">
+    <img src="pomodoro.gif" width="450">
+  <br>
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### Built With
 
-## Learn More
+* [React](https://reactjs.org/docs/getting-started.html)
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+* [HTML5](https://developer.mozilla.org/es/docs/HTML/HTML5)
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+* [CSS](https://developer.mozilla.org/es/docs/Web/CSS)
 
-### Code Splitting
+* Deployed with
+    * [Netlify](https://docs.netlify.com/)
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+<!-- GETTING STARTED -->
+## Getting Started
 
-### Analyzing the Bundle Size
+To get a local copy up and running follow these simple steps.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+Clone or fork the <a href="https://github.com/redacuve/pomodoro-clock">repo</a> [git@github.com:redacuve/pomodoro-clock.git]
 
-### Making a Progressive Web App
+*note you need have install npm or yarn
+* [npm](https://www.npmjs.com/get-npm)
+* [yarn](https://classic.yarnpkg.com/en/docs/install)
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
 
-### Advanced Configuration
+<!-- HOW IT WORKS -->
+## How it Works
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+Its created with create-react-app. It has a very simplistic and flat design with arrows for selecting the time for the session or the break, it has a beautiful minimalistic display with the time left, and the play/stop button and the reset button. Its build with react and has three main components the Pomodoro app, the display component, and the length box component (where you can change the time for the session or break).
+This is the last project to obtain the Front End Libraries Certification by FreeCodeCamp. The other projects are on [CodePen.io](https://codepen.io/redacuve)
 
-### Deployment
+### Running the code
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+*   Navigate to the root directory of the project
 
-### `yarn build` fails to minify
+*   Run this command on your terminal to run the code locally on http://localhost:3000:
+    ```
+    $ npm start
+    ```
+*   Also you can build this app for production, react are going to make a build folder with minified files, and filenames with hashes for best performance
+    ```
+    $ npm build
+    ```
+*   You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+* To learn React, check out the [React documentation](https://reactjs.org/).
+
+<!-- CONTRIBUTING -->
+
+## Contributing
+
+Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+
+1. Fork the Project
+
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+
+5. Open a Pull Request
+
+<!-- LICENSE -->
+
+## License
+
+This project is under the <a href="https://www.gnu.org/licenses/gpl-3.0.html">GNU Public License V3</a>. For more information see <a href="https://github.com/redacuve/pomodoro-clock/blob/master/LICENSE">here</a>
+
+<!-- CONTACT -->
+
+## Contact
+
+Rey David Cuevas Vela - [@redacuve](https://twitter.com/redacuve) - redacuve@gmail.com -[linkedin.com/in/redacuve/](https://www.linkedin.com/in/redacuve/)
+
+Project Link: [github.com/redacuve/pomodoro-clock](https://github.com/redacuve/pomodoro-clock) - Pomodoro App.
